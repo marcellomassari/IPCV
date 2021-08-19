@@ -12,6 +12,6 @@ with mic as source:
     print("Say something!")
     audio = r.listen(source)
 
-print("I thinks you said '" + r.recognize_google(audio) + "'")
+print("I thinks you said '" + r.recognize_google(audio, language="it-IT") + "'")
 
 
