@@ -9,7 +9,7 @@ mic = sr.Microphone(device_index=1)
 #mic = sr.Microphone(device_index=0)
 
 with mic as source:
-    print("Aspetta. Sto calibrando il microdono...")
+    print("Aspetta. Sto calibrando il microfono...")
     r.adjust_for_ambient_noise(source, duration=2)
     print("Ora parla!!")
     audio = r.listen(source)
