@@ -6,6 +6,9 @@ r = sr.Recognizer()
 #microfono Lorenzo
 mic = sr.Microphone(device_index=1)
 
+#microfono Marcello
+#mic = sr.Microphone(device_index=0)
+
 with mic as source:
     print("Please wait. Calibrating microphone...")
     r.adjust_for_ambient_noise(source, duration=5)
