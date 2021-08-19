@@ -3,6 +3,7 @@ import speech_recognition as sr
 r = sr.Recognizer()
 #print(sr.Microphone.list_microphone_names())
 
+#microfono Lorenzo
 mic = sr.Microphone(device_index=1)
 
 with mic as source:
