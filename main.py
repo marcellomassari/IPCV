@@ -3,10 +3,10 @@ import speech_recognition as sr
 r = sr.Recognizer()
 
 #microfono Lorenzo
-mic = sr.Microphone(device_index=1)
+#mic = sr.Microphone(device_index=1)
 
 #microfono Marcello e Massimiliano
-#mic = sr.Microphone(device_index=0)
+mic = sr.Microphone(device_index=0)
 
 with mic as source:
     print("Aspetta. Sto calibrando il microfono...")
