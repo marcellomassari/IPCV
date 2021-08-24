@@ -16,4 +16,3 @@ with mic as source:
 
 print("Hai detto '" + r.recognize_google(audio, language="it-IT") + "'")
 
-

@@ -1,0 +1,7 @@
+L'obiettivo del nostro progetto è quello di creare un'applicazione che aggiunga in AR elementi di arredo ad una stanza.
+I comandi saranno dati tramite interazione vocale e l'algoritmo identificherà il luogo da noi indicato ed aggiungerà l'oggetto scelto.
+L'interazione vocale inizierà con l'utente che pronuncia una frase specifica (es. "avvia app riconoscimento")
+e si concluderà con una frase da parte dell'app (es. "oggetto inserito correttamente" oppure "non ho trovato nessun oggetto con il nome specificato").
+I comandi da implementare sono i seguenti:
+- posizionamento di qualche oggetto su superfici specifiche (es. "posiziona l'oggetto x sopra y", dove l'applicazione sarà incaricata di riconoscere l'oggetto y, andare a prendere l'oggetto x da un database e posizionarlo sulla superficie corrispondente)
+- riconoscimento di un paio di oggetti (es. "trova l'oggetto x", dove l'applicazione identificherà l'oggetto scelto e lo evidenzierà)
