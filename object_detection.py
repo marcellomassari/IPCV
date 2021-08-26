@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import argparse
 import time
+import matplotlib.pyplot as plt
 
 def load_yolo():
     # load YoloV3 weights and configuration file
@@ -87,9 +88,29 @@ def image_detect(img_path):
         if key == 27:
             break
 
+def webcam_detect():
+    model, classes, colors, output_layers = load_yolo()
+    cap = cv2.VideoCapture(0)
+    # check if the webcam is opened correctly
+    if not cap.isOpened():
+        raise IOError("Cannot open webcam")
+    while True:
+        ret, frame = cap.read()
+        height, width, channels = frame.shape
+        blob, outputs = detect_objects(frame, model, output_layers)
+        boxes, confs, class_ids = get_box_dimensions(outputs, height, width)
+        draw_labels(boxes, confs, colors,class_ids, classes, frame)
+        cv2.imshow('Input', frame)
+        key = cv2.waitKey(1)
+        if key == 27:
+            break
+    cap.release()
+    cv2.destroyAllWindows()
+
+
 def main():
     img_path = "images/strada_prova.jpeg"
-    image_detect(img_path)
+    webcam_detect()
 
 
 if __name__ == "__main__":
