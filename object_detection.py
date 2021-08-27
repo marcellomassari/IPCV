@@ -9,7 +9,7 @@ def load_yolo():
     net = cv2.dnn.readNet("yolov3.weights", "yolov3.cfg")
 
     # store names of coco.names in a list
-    classes=[]
+    classes = []
     with open("coco.names", "r") as f:
         classes = [line.strip() for line in f.readlines()]
 
@@ -44,7 +44,7 @@ def get_box_dimensions(outputs, height, width):
     for output in outputs:
         for detect in output:
             scores = detect[5:]
-            print(scores)
+            #print(scores)
             class_id = np.argmax(scores)
             conf = scores[class_id]
             # select bounding box with confidence > 30%
@@ -88,33 +88,40 @@ def image_detect(img_path):
         if key == 27:
             break
 
+
 def webcam_detect():
     model, classes, colors, output_layers = load_yolo()
     cap = cv2.VideoCapture(0)
-    # check if the webcam is opened correctly
-    if not cap.isOpened():
-        raise IOError("Cannot open webcam")
     while True:
-        ret, frame = cap.read()
+        _, frame = cap.read()
         height, width, channels = frame.shape
         blob, outputs = detect_objects(frame, model, output_layers)
         boxes, confs, class_ids = get_box_dimensions(outputs, height, width)
         draw_labels(boxes, confs, colors,class_ids, classes, frame)
-        cv2.imshow('Input', frame)
         key = cv2.waitKey(1)
         if key == 27:
             break
     cap.release()
-    cv2.destroyAllWindows()
 
-
-def main():
-    img_path = "images/strada_prova.jpeg"
-    webcam_detect()
-
+def start_video(video_path):
+    model, classes, colors, output_layers = load_yolo()
+    cap = cv2.VideoCapture(video_path)
+    while True:
+        _, frame = cap.read()
+        height, width, channels = frame.shape
+        blob, outputs = detect_objects(frame, model, output_layers)
+        boxes, confs, class_ids = get_box_dimensions(outputs, height, width)
+        draw_labels(boxes, confs, colors, class_ids, classes, frame)
+        key = cv2.waitKey(1)
+        if key == 27:
+            break
+    cap.release()
 
 if __name__ == "__main__":
-    try:
-        main()
-    except KeyboardInterrupt:
-        exit(0)
+    img_path = "images/strada_prova.jpeg"
+    video_path = "videos/video_prova.mp4"
+    #image_detect(img_path)
+    #webcam_detect()
+    start_video(video_path)
+
+    cv2.destroyAllWindows()
