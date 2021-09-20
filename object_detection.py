@@ -60,7 +60,7 @@ def get_box_dimensions(outputs, height, width):
                 class_ids.append(class_id)
     return boxes, confs, class_ids
 
-def draw_labels(boxes, confs, colors, class_ids, classes, img):
+def draw_labels(boxes, confs, colors, class_ids, classes, img, utente_id):
     # draw the bounding box and add an object label to it
     # NMSBoxes --> Non-Maximum Suppression --> we pass in confidence threshold value and NMS threshold value as parameters to select one bounding box.
     # From the range 0 to 1 we should select an intermediate value like 0.4 or 0.5
@@ -70,7 +70,7 @@ def draw_labels(boxes, confs, colors, class_ids, classes, img):
     for i in range(len(boxes)):
         if i in indexes:
             # IDENTIFICA SOLO CLASSE PRESCELTA
-            if class_ids[i]==56:
+            if class_ids[i] == utente_id:
                 x, y, w, h = boxes[i]
                 label = str(classes[class_ids[i]])
                 color = colors[i]
@@ -105,7 +105,7 @@ def webcam_detect():
             break
     cap.release()
 
-def start_video(video_path):
+def start_video(video_path, utente_id):
     model, classes, colors, output_layers = load_yolo()
     cap = cv2.VideoCapture(video_path)
     while True:
@@ -113,7 +113,7 @@ def start_video(video_path):
         height, width, channels = frame.shape
         blob, outputs = detect_objects(frame, model, output_layers)
         boxes, confs, class_ids = get_box_dimensions(outputs, height, width)
-        draw_labels(boxes, confs, colors, class_ids, classes, frame)
+        draw_labels(boxes, confs, colors, class_ids, classes, frame, utente_id)
         key = cv2.waitKey(1)
         if key == 27:
             break
@@ -124,6 +124,6 @@ if __name__ == "__main__":
     video_path = "videos/video_prova.mp4"
     #image_detect(img_path)
     #webcam_detect()
-    start_video(video_path)
+    #start_video(video_path)
 
     cv2.destroyAllWindows()

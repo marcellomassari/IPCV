@@ -1,4 +1,5 @@
 import speech_recognition as sr
+import object_detection
 
 UTENTE_ID = -1
 
@@ -16,10 +17,24 @@ with mic as source:
     print("Ora parla!!")
     audio = r.listen(source)
 
-#print("Hai detto '" + r.recognize_google(audio, language="it-IT") + "'")
-if r.recognize_google(audio, language="it-IT") == "Cerca oggetti":
-    print("Cosa vuoi cercare?")
+audio_stringa = r.recognize_google(audio, language="it-IT")
+audio_vettore = audio_stringa.split()
+print(audio_vettore)
 
+if audio_vettore[0].lower() == "cerca":
+    object = audio_vettore[len(audio_vettore)-1]
+    if object == "tavolo":
+        UTENTE_ID = 60
+    elif object == "sedia":
+        UTENTE_ID = 56
+    elif object == "libro":
+        UTENTE_ID == 73
+    else:
+        print("Richiesta non valida!")
 
-elif r.recognize_google(audio, language="it-IT") == "Posiziona oggetti":
-    print("POSIZIONA OGGETTI")
+    object_detection.start_video("videos/video_prova.mp4", utente_id=UTENTE_ID)
+
+elif audio_vettore[0].lower() == "posiziona":
+    print("POSIZIONAMENTO OGGETTI")
+
+print(UTENTE_ID)
