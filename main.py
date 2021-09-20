@@ -1,5 +1,7 @@
 import speech_recognition as sr
 
+UTENTE_ID = -1
+
 r = sr.Recognizer()
 
 #microfono Lorenzo
@@ -14,5 +16,10 @@ with mic as source:
     print("Ora parla!!")
     audio = r.listen(source)
 
-print("Hai detto '" + r.recognize_google(audio, language="it-IT") + "'")
+#print("Hai detto '" + r.recognize_google(audio, language="it-IT") + "'")
+if r.recognize_google(audio, language="it-IT") == "Cerca oggetti":
+    print("Cosa vuoi cercare?")
 
+
+elif r.recognize_google(audio, language="it-IT") == "Posiziona oggetti":
+    print("POSIZIONA OGGETTI")
