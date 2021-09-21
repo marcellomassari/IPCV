@@ -28,7 +28,7 @@ if audio_vettore[0].lower() == "cerca":
     elif object == "sedia":
         UTENTE_ID = 56
     elif object == "libro":
-        UTENTE_ID == 73
+        UTENTE_ID = 73
     else:
         print("Richiesta non valida!")
 
