@@ -91,7 +91,7 @@ def image_detect(img_path):
             break
 
 
-def webcam_detect():
+def webcam_detect(utente_id):
     model, classes, colors, output_layers = load_yolo()
     cap = cv2.VideoCapture(0)
     while True:
@@ -99,7 +99,7 @@ def webcam_detect():
         height, width, channels = frame.shape
         blob, outputs = detect_objects(frame, model, output_layers)
         boxes, confs, class_ids = get_box_dimensions(outputs, height, width)
-        draw_labels(boxes, confs, colors,class_ids, classes, frame)
+        draw_labels(boxes, confs, colors,class_ids, classes, frame, utente_id)
         key = cv2.waitKey(1)
         if key == 27:
             break
