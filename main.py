@@ -32,8 +32,8 @@ if audio_vettore[0].lower() == "cerca":
     else:
         print("Richiesta non valida!")
 
-    #object_detection.start_video("videos/video_prova.mp4", utente_id=UTENTE_ID)
-    object_detection.webcam_detect(utente_id=UTENTE_ID)
+    object_detection.start_video("videos/video_prova.mp4", utente_id=UTENTE_ID)
+    #object_detection.webcam_detect(utente_id=UTENTE_ID)
 
 elif audio_vettore[0].lower() == "posiziona":
     print("POSIZIONAMENTO OGGETTI")
