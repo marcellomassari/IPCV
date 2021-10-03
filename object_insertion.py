@@ -3,11 +3,13 @@ from pyglet.gl import *
 from pywavefront import visualization
 import ctypes
 import os
+import cv2
 
 window = pyglet.window.Window(width=1280, height=720, resizable=True)
 
-root_path = os.path.dirname(__file__)
+image = pyglet.resource.image("images/stanza_prova.jpeg")
 
+root_path = os.path.dirname(__file__)
 obj = pywavefront.Wavefront(os.path.join(root_path, 'models/cube_prova.obj'))
 
 lightfv = ctypes.c_float * 4
@@ -31,7 +33,9 @@ def on_draw():
 
     glLightfv(GL_LIGHT0, GL_POSITION, lightfv(-1.0, 1.0, 1.0, 0.0))
 
-    draw_box(obj, -4.0, 2.0)
+    image.blit(0, 0)
+
+    draw_box(obj, 0.0, 0.0)
 
 def draw_box(box, x, y):
     glLoadIdentity()
