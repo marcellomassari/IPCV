@@ -4,6 +4,7 @@ from pywavefront import visualization
 import ctypes
 import os
 import cv2
+import numpy as np
 
 window = pyglet.window.Window(width=1280, height=720, resizable=True)
 
@@ -29,20 +30,23 @@ def on_resize(width, height):
 @window.event
 def on_draw():
     window.clear()
+
+    width, height = image.width, image.height
+    image.anchor_x = width / 2
+    image.anchor_y = height / 2
+
+    image.blit(image.anchor_x, image.anchor_y)
+
     glLoadIdentity()
 
-    glLightfv(GL_LIGHT0, GL_POSITION, lightfv(-1.0, 1.0, 1.0, 0.0))
-
-    image.blit(0, 0)
+    #glLightfv(GL_LIGHT0, GL_POSITION, lightfv(-1.0, 1.0, 1.0, 0.0))
 
     draw_box(obj, 0.0, 0.0)
+
 
 def draw_box(box, x, y):
     glLoadIdentity()
     glTranslated(x, y, -10.0)
-    glRotatef(rotation, 0.0, 1.0, 0.0)
-    glRotatef(-25.0, 1.0, 0.0, 0.0)
-    glRotatef(45.0, 0.0, 0.0, 1.0)
 
     visualization.draw(box)
 
