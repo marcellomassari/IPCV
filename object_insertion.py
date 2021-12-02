@@ -29,19 +29,32 @@ def on_resize(width, height):
 
 @window.event
 def on_draw():
-    window.clear()
-
-    width, height = image.width, image.height
-    image.anchor_x = width / 2
-    image.anchor_y = height / 2
-
-    image.blit(image.anchor_x, image.anchor_y)
-
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+    glEnable(GL_DEPTH_TEST)  # enable depth testing
+    glMatrixMode(GL_MODELVIEW)
     glLoadIdentity()
 
-    #glLightfv(GL_LIGHT0, GL_POSITION, lightfv(-1.0, 1.0, 1.0, 0.0))
-
     draw_box(obj, 0.0, 0.0)
+
+    glDisable(GL_DEPTH_TEST)
+    # store the projection matrix to restore later
+    glMatrixMode(GL_PROJECTION)
+    glPushMatrix()
+
+    # load orthographic projection matrix
+    glLoadIdentity()
+    # glOrtho(0, float(self.width),0, float(self.height), 0, 1)
+    far = 8192
+    glOrtho(-window.width / 2., window.width / 2., -window.height / 2., window.height / 2., 0, far)
+
+    glMatrixMode(GL_MODELVIEW)
+    glLoadIdentity()
+
+    image.blit(0.0, 0.0, 0.0)
+
+    glMatrixMode(GL_PROJECTION)
+    glPopMatrix()
+
 
 
 def draw_box(box, x, y):
