@@ -3,8 +3,6 @@ from pyglet.gl import *
 from pywavefront import visualization
 import ctypes
 import os
-import cv2
-import numpy as np
 
 window = pyglet.window.Window(width=1280, height=720, resizable=True)
 
@@ -14,7 +12,6 @@ root_path = os.path.dirname(__file__)
 obj = pywavefront.Wavefront(os.path.join(root_path, 'models/cube_prova.obj'))
 
 lightfv = ctypes.c_float * 4
-rotation = 0.0
 
 @window.event
 def on_resize(width, height):
@@ -29,6 +26,8 @@ def on_resize(width, height):
 
 @window.event
 def on_draw():
+
+    # enable 3d
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glEnable(GL_DEPTH_TEST)  # enable depth testing
     glMatrixMode(GL_MODELVIEW)
@@ -36,39 +35,27 @@ def on_draw():
 
     draw_box(obj, 0.0, 0.0)
 
+    #enable 2d
     glDisable(GL_DEPTH_TEST)
     # store the projection matrix to restore later
     glMatrixMode(GL_PROJECTION)
     glPushMatrix()
-
     # load orthographic projection matrix
     glLoadIdentity()
-    # glOrtho(0, float(self.width),0, float(self.height), 0, 1)
-    far = 8192
-    glOrtho(-window.width / 2., window.width / 2., -window.height / 2., window.height / 2., 0, far)
+    glOrtho(0, float(window.width),0, float(window.height), 0, 1)
 
     glMatrixMode(GL_MODELVIEW)
     glLoadIdentity()
 
-    image.blit(0.0, 0.0, 0.0)
+    image.blit(0.0, 0.0, -1.0)
 
+    # disable 2d
     glMatrixMode(GL_PROJECTION)
     glPopMatrix()
 
 
-
 def draw_box(box, x, y):
-    glLoadIdentity()
-    glTranslated(x, y, -10.0)
-
+    glTranslated(x, y, -5.0)
     visualization.draw(box)
 
-def update(dt):
-    global rotation
-    rotation += 90.0 * dt
-
-    if rotation > 720.0:
-        rotation = 0.0
-
-pyglet.clock.schedule(update)
 pyglet.app.run()
