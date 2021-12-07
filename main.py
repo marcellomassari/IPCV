@@ -1,6 +1,7 @@
 import speech_recognition as sr
 import object_detection
 
+'''
 UTENTE_ID = -1
 
 r = sr.Recognizer()
@@ -32,10 +33,14 @@ if audio_vettore[0].lower() == "cerca":
     else:
         print("Richiesta non valida!")
 
-    object_detection.start_video("videos/video_prova.mp4", utente_id=UTENTE_ID)
+'''
+
+object_detection.start_video("videos/video_prova.mp4", utente_id=60)
+
+    #object_detection.start_video("videos/video_prova.mp4", utente_id=UTENTE_ID)
     #object_detection.webcam_detect(utente_id=UTENTE_ID)
 
-elif audio_vettore[0].lower() == "posiziona":
-    print("POSIZIONAMENTO OGGETTI")
+#elif audio_vettore[0].lower() == "posiziona":
+#    print("POSIZIONAMENTO OGGETTI")
 
-print(UTENTE_ID)
+#print(UTENTE_ID)

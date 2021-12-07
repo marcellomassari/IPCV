@@ -72,10 +72,28 @@ def draw_labels(boxes, confs, colors, class_ids, classes, img, utente_id):
             # IDENTIFICA SOLO CLASSE PRESCELTA
             if class_ids[i] == utente_id:
                 x, y, w, h = boxes[i]
+
+                '''
                 label = str(classes[class_ids[i]])
                 color = colors[i]
                 cv2.rectangle(img, (x,y), (x+w, y+h), color, 2)
                 cv2.putText(img, label, (x, y-5), font, 1, color, 1)
+
+                '''
+                oggetto_add = cv2.imread("objects/vaso_prova.jpeg")
+
+                scale_percent = 80
+                width = int(oggetto_add.shape[1] * scale_percent / 100)
+                height = int(oggetto_add.shape[0] * scale_percent / 100)
+                dim = (width, height)
+
+                oggetto_add = cv2.resize(oggetto_add, dim, interpolation=cv2.INTER_AREA)
+
+                roi = img[x:x+w, y:y+h]
+                tmp = cv2.add(roi, oggetto_add)
+                img[x:x+w, y:y+h] = tmp
+                
+
         cv2.imshow("Image", img)
 
 
