@@ -73,26 +73,32 @@ def draw_labels(boxes, confs, colors, class_ids, classes, img, utente_id):
             if class_ids[i] == utente_id:
                 x, y, w, h = boxes[i]
 
-                '''
+
                 label = str(classes[class_ids[i]])
                 color = colors[i]
                 cv2.rectangle(img, (x,y), (x+w, y+h), color, 2)
                 cv2.putText(img, label, (x, y-5), font, 1, color, 1)
 
-                '''
+
                 oggetto_add = cv2.imread("objects/vaso_prova.jpeg")
+                #oggetto_add = cv2.cvtColor(oggetto_add,cv2.COLOR_BGR2GRAY)
+                #img= cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+                #regolare il resize affinché l'immagine sia 640x360 (ricontrolla)
 
-                scale_percent = 80
-                width = int(oggetto_add.shape[1] * scale_percent / 100)
-                height = int(oggetto_add.shape[0] * scale_percent / 100)
-                dim = (width, height)
+                #scale_percent = 10
+                #width = int(oggetto_add.shape[1] * scale_percent / 100)
+                #height = int(oggetto_add.shape[0] * scale_percent / 100)
+                #dim = (width, height)
+                # oggetto_add = cv2.resize(oggetto_add, dim, interpolation=cv2.INTER_AREA)
 
-                oggetto_add = cv2.resize(oggetto_add, dim, interpolation=cv2.INTER_AREA)
+                down_width = w
+                down_height = h
+                down_points = (down_width, down_height)
+                oggetto_add = cv2.resize(oggetto_add, down_points, interpolation=cv2.INTER_LINEAR)
+                roi = img[y:y+h, x:x+w]
+                tmp = cv2.add(roi,oggetto_add) # <--- il problema è qui
+                img[y:y+h, x:x+w] = tmp
 
-                roi = img[x:x+w, y:y+h]
-                tmp = cv2.add(roi, oggetto_add)
-                img[x:x+w, y:y+h] = tmp
-                
 
         cv2.imshow("Image", img)
 
