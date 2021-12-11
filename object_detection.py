@@ -95,8 +95,7 @@ def draw_labels(boxes, confs, colors, class_ids, classes, img, utente_id):
                 down_height = 70
                 down_points = (down_width, down_height)
                 oggetto_add = cv2.resize(oggetto_add, down_points, interpolation=cv2.INTER_LINEAR)
-                #oggetto_add = cv2.cvtColor(oggetto_add,cv2.COLOR_BGR2GRAY)
-                #img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
                 oggetto_add2 = cv2.cvtColor(oggetto_add, cv2.COLOR_BGR2GRAY)
                 ret, mask = cv2.threshold(oggetto_add2, 1, 255, cv2.THRESH_BINARY)
                 roi = img[y:y+70, x:x+100]
@@ -104,8 +103,7 @@ def draw_labels(boxes, confs, colors, class_ids, classes, img, utente_id):
                 roi += oggetto_add
                 tmp = cv2.add(roi, oggetto_add)
                 img[y:y+70, x:x+100] = tmp
-                #oggetto_add = cv2.cvtColor(oggetto_add, cv2.COLOR_GRAY2RGB)
-                #img= cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
+
 
 
         cv2.imshow("Image", img)
