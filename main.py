@@ -1,15 +1,10 @@
 import speech_recognition as sr
 import object_detection
 
-
 UTENTE_ID = -1
 
 r = sr.Recognizer()
 
-#microfono Lorenzo
-#mic = sr.Microphone(device_index=1)
-
-#microfono Marcello e Massimiliano
 mic = sr.Microphone(device_index=0)
 
 with mic as source:
@@ -30,15 +25,15 @@ if audio_vettore[0].lower() == "cerca":
         UTENTE_ID = 56
     elif object == "libro":
         UTENTE_ID = 73
+    elif object == "divano":
+        UTENTE_ID = 57
+    elif object == "letto":
+        UTENTE_ID = 59
     else:
         print("Richiesta non valida!")
 
-
-
-#object_detection.start_video("videos/video_prova.mp4", utente_id=60)
-
     object_detection.start_video("videos/video_prova.mp4", utente_id=UTENTE_ID)
-    object_detection.webcam_detect(utente_id=UTENTE_ID)
+    #object_detection.webcam_detect(utente_id=UTENTE_ID)
 
 elif audio_vettore[0].lower() == "posiziona":
    print("POSIZIONAMENTO OGGETTI")
