@@ -1,7 +1,7 @@
 import speech_recognition as sr
 import object_detection
-
-UTENTE_ID = -1
+import object_insertion_2D
+import cv2
 
 r = sr.Recognizer()
 
@@ -20,22 +20,45 @@ print(audio_vettore)
 if audio_vettore[0].lower() == "cerca":
     object = audio_vettore[len(audio_vettore)-1]
     if object == "tavolo":
-        UTENTE_ID = 60
+        OBJ_ID = 60
     elif object == "sedia":
-        UTENTE_ID = 56
+        OBJ_ID = 56
     elif object == "libro":
-        UTENTE_ID = 73
+        OBJ_ID = 73
     elif object == "divano":
-        UTENTE_ID = 57
+        OBJ_ID = 57
     elif object == "letto":
-        UTENTE_ID = 59
+        OBJ_ID = 59
+    else:
+        print("Richiesta non valida!")
+        OBJ_ID = -1
+
+    print(OBJ_ID)
+
+    object_detection.start_video("videos/video_prova.mp4", OBJ_ID)
+
+elif audio_vettore[0].lower() == "posiziona":
+    object_pos = audio_vettore[2]
+    object_ref = audio_vettore[len(audio_vettore)-1]
+
+    if len(audio_vettore) == 6:
+        direction = audio_vettore[3]
+    elif len(audio_vettore) == 7:
+        direction = audio_vettore[4]
+
+    if object_ref == "tavolo":
+        OBJ_REF_ID = 60
+    elif object_ref == "sedia":
+        OBJ_REF_ID = 56
+    elif object_ref == "divano":
+        OBJ_REF_ID = 57
+    elif object_ref == "letto":
+        OBJ_REF_ID = 59
     else:
         print("Richiesta non valida!")
 
-    object_detection.start_video("videos/video_prova.mp4", utente_id=UTENTE_ID)
-    #object_detection.webcam_detect(utente_id=UTENTE_ID)
+    if object_pos == "vaso":
+        IMG_OBJ = cv2.imread("objects/vaso_png.png")
 
-elif audio_vettore[0].lower() == "posiziona":
-   print("POSIZIONAMENTO OGGETTI")
+    object_insertion_2D.start_video("videos/video_prova.mp4",IMG_OBJ, direction, OBJ_REF_ID)
 
-print(UTENTE_ID)

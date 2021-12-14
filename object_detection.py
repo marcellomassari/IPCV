@@ -81,15 +81,6 @@ def draw_labels(boxes, confs, colors, class_ids, classes, img, utente_id):
 
 
                 oggetto_add = cv2.imread("objects/vaso_png.png")
-                #oggetto_add = cv2.cvtColor(oggetto_add,cv2.COLOR_BGR2GRAY)
-                #img= cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-                #regolare il resize affinché l'immagine sia 640x360 (ricontrolla)
-
-                #scale_percent = 10
-                #width = int(oggetto_add.shape[1] * scale_percent / 100)
-                #height = int(oggetto_add.shape[0] * scale_percent / 100)
-                #dim = (width, height)
-                # oggetto_add = cv2.resize(oggetto_add, dim, interpolation=cv2.INTER_AREA)
 
                 down_width = 100
                 down_height = 70
@@ -103,7 +94,6 @@ def draw_labels(boxes, confs, colors, class_ids, classes, img, utente_id):
                 roi += oggetto_add
                 tmp = cv2.add(roi, oggetto_add)
                 img[y:y+70, x:x+100] = tmp
-
 
 
         cv2.imshow("Image", img)
