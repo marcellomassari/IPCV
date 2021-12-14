@@ -80,7 +80,7 @@ def draw_labels(boxes, confs, colors, class_ids, classes, img, utente_id):
                 cv2.putText(img, label, (x, y-5), font, 1, color, 1)
 
 
-                oggetto_add = cv2.imread("objects/vaso_png.png")
+                oggetto_add = cv2.imread("objects/vaso.png")
 
                 down_width = 100
                 down_height = 70

@@ -58,7 +58,13 @@ elif audio_vettore[0].lower() == "posiziona":
         print("Richiesta non valida!")
 
     if object_pos == "vaso":
-        IMG_OBJ = cv2.imread("objects/vaso_png.png")
+        IMG_OBJ = cv2.imread("objects/vaso.png")
+    elif object_pos == "lampada":
+        IMG_OBJ = cv2.imread("objects/lampada.png")
+    elif object_pos == "piatto":
+        IMG_OBJ = cv2.imread("objects/piatto.png")
+    elif object_pos == "televisore":
+        IMG_OBJ = cv2.imread("objects/televisore.png")
 
     object_insertion_2D.start_video("videos/video_prova.mp4",IMG_OBJ, direction, OBJ_REF_ID)
 
