@@ -1,8 +1,5 @@
 import cv2
 import numpy as np
-import argparse
-import time
-import matplotlib.pyplot as plt
 
 def load_yolo():
     # load YoloV3 weights and configuration file
@@ -73,61 +70,18 @@ def draw_labels(boxes, confs, colors, class_ids, classes, img, utente_id):
             if class_ids[i] == utente_id:
                 x, y, w, h = boxes[i]
 
-
                 label = str(classes[class_ids[i]])
                 color = colors[i]
                 cv2.rectangle(img, (x,y), (x+w, y+h), color, 2)
                 cv2.putText(img, label, (x, y-5), font, 1, color, 1)
 
 
-                oggetto_add = cv2.imread("objects/vaso.png")
-
-                down_width = 100
-                down_height = 70
-                down_points = (down_width, down_height)
-                oggetto_add = cv2.resize(oggetto_add, down_points, interpolation=cv2.INTER_LINEAR)
-
-                oggetto_add2 = cv2.cvtColor(oggetto_add, cv2.COLOR_BGR2GRAY)
-                ret, mask = cv2.threshold(oggetto_add2, 1, 255, cv2.THRESH_BINARY)
-                roi = img[y:y+70, x:x+100]
-                roi[np.where(mask)] = 0
-                roi += oggetto_add
-                tmp = cv2.add(roi, oggetto_add)
-                img[y:y+70, x:x+100] = tmp
-
-
         cv2.imshow("Image", img)
-
-
-def image_detect(img_path):
-    model, classes, colors, output_layers = load_yolo()
-    image, height, width, channels = load_image(img_path)
-    blob, outputs, = detect_objects(image, model, output_layers)
-    boxes, confs, class_ids = get_box_dimensions(outputs, height, width)
-    draw_labels(boxes, confs, colors, class_ids, classes, image)
-    while True:
-        key = cv2.waitKey(1)
-        if key == 27:
-            break
-
-
-def webcam_detect(utente_id):
-    model, classes, colors, output_layers = load_yolo()
-    cap = cv2.VideoCapture(0)
-    while True:
-        _, frame = cap.read()
-        height, width, channels = frame.shape
-        blob, outputs = detect_objects(frame, model, output_layers)
-        boxes, confs, class_ids = get_box_dimensions(outputs, height, width)
-        draw_labels(boxes, confs, colors,class_ids, classes, frame, utente_id)
-        key = cv2.waitKey(1)
-        if key == 27:
-            break
-    cap.release()
 
 def start_video(video_path, utente_id):
     model, classes, colors, output_layers = load_yolo()
     cap = cv2.VideoCapture(video_path)
+    #cap = cv2.VideoCapture(0) per webcam
     while True:
         _, frame = cap.read()
         height, width, channels = frame.shape
@@ -138,12 +92,3 @@ def start_video(video_path, utente_id):
         if key == 27:
             break
     cap.release()
-
-if __name__ == "__main__":
-    img_path = "images/strada_prova.jpeg"
-    video_path = "videos/video_prova.mp4"
-    #image_detect(img_path)
-    #webcam_detect()
-    #start_video(video_path)
-
-    cv2.destroyAllWindows()
