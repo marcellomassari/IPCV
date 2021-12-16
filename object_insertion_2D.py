@@ -57,26 +57,30 @@ def draw_labels(boxes, confs, colors, class_ids, classes, img, IMG_OBJ, DIR, OBJ
                 cv2.putText(img, label, (x, y-5), font, 1, color, 1)
 
 
+
+
                 down_width = int(w/4)
                 down_height = int(h/2)
                 down_points = (down_width, down_height)
                 oggetto_add = cv2.resize(IMG_OBJ, down_points, interpolation=cv2.INTER_LINEAR)
 
+                recenter = int(w/2) - int(down_width/2)
+
                 oggetto_add2 = cv2.cvtColor(oggetto_add, cv2.COLOR_BGR2GRAY)
                 ret, mask = cv2.threshold(oggetto_add2, 1, 255, cv2.THRESH_BINARY)
                 if DIR == "sopra":
                     h=int(-h/2)
-                    roi = img[y+h:y+h+down_height, x:x+down_width]
+                    roi = img[y+h:y+h+down_height, x+recenter:x+recenter+down_width]
                     roi[np.where(mask)] = 0
                     roi += oggetto_add
                     tmp = cv2.add(roi, oggetto_add)
-                    img[y + h :y +down_height + h, x:x+down_width]=tmp
+                    img[y + h :y +down_height + h, x+recenter:x+recenter+down_width]=tmp
                 elif DIR == "sotto":
-                    roi = img[y + h-down_height:y + h, x:x + down_width]
+                    roi = img[y + h-down_height:y + h, x+recenter:x+recenter + down_width]
                     roi[np.where(mask)] = 0
                     roi += oggetto_add
                     tmp = cv2.add(roi, oggetto_add)
-                    img[y + h-down_height:y + h, x:x + down_width] = tmp
+                    img[y + h-down_height:y + h, x+recenter:x+recenter + down_width] = tmp
                 elif DIR == "sinistra":
                     roi = img[y:y + down_height, x-down_width :x]
                     roi[np.where(mask)] = 0
