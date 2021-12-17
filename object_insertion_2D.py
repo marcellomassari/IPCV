@@ -59,6 +59,7 @@ def draw_labels(boxes, confs, colors, class_ids, classes, img, IMG_OBJ, DIR, OBJ
 
 
 
+
                 down_width = int(w/4)
                 down_height = int(h/2)
                 down_points = (down_width, down_height)
@@ -70,29 +71,41 @@ def draw_labels(boxes, confs, colors, class_ids, classes, img, IMG_OBJ, DIR, OBJ
                 ret, mask = cv2.threshold(oggetto_add2, 1, 255, cv2.THRESH_BINARY)
                 if DIR == "sopra":
                     h=int(-h/2)
-                    roi = img[y+h:y+h+down_height, x+recenter:x+recenter+down_width]
-                    roi[np.where(mask)] = 0
-                    roi += oggetto_add
-                    tmp = cv2.add(roi, oggetto_add)
-                    img[y + h :y +down_height + h, x+recenter:x+recenter+down_width]=tmp
+                    if y+h<0:
+                        print("oggetto momentaneamente fuori dall'inquadratura. Riposizionare la webcam.")
+                    else:
+                        roi = img[y+h:y+h+down_height, x+recenter:x+recenter+down_width]
+                        roi[np.where(mask)] = 0
+                        roi += oggetto_add
+                        tmp = cv2.add(roi, oggetto_add)
+                        img[y + h :y +down_height + h, x+recenter:x+recenter+down_width]=tmp
                 elif DIR == "sotto":
-                    roi = img[y + h-down_height:y + h, x+recenter:x+recenter + down_width]
-                    roi[np.where(mask)] = 0
-                    roi += oggetto_add
-                    tmp = cv2.add(roi, oggetto_add)
-                    img[y + h-down_height:y + h, x+recenter:x+recenter + down_width] = tmp
+                    if OBJ_REF_ID==57 or OBJ_REF_ID==59:
+                        print("impossibile posizionare oggetto")
+                    else:
+                        roi = img[y + h-down_height:y + h, x+recenter:x+recenter + down_width]
+                        roi[np.where(mask)] = 0
+                        roi += oggetto_add
+                        tmp = cv2.add(roi, oggetto_add)
+                        img[y + h-down_height:y + h, x+recenter:x+recenter + down_width] = tmp
                 elif DIR == "sinistra":
-                    roi = img[y:y + down_height, x-down_width :x]
-                    roi[np.where(mask)] = 0
-                    roi += oggetto_add
-                    tmp = cv2.add(roi, oggetto_add)
-                    img[y:y + down_height, x-down_width:x] = tmp
+                    if x-down_width<0:
+                        print("oggetto fuori dall'inquadratura. Riposizionare la webcam")
+                    else:
+                        roi = img[y:y + down_height, x-down_width :x]
+                        roi[np.where(mask)] = 0
+                        roi += oggetto_add
+                        tmp = cv2.add(roi, oggetto_add)
+                        img[y:y + down_height, x-down_width:x] = tmp
                 elif DIR == "destra":
-                    roi = img[y:y+ down_height, x+w:x + w + down_width]
-                    roi[np.where(mask)] = 0
-                    roi += oggetto_add
-                    tmp = cv2.add(roi, oggetto_add)
-                    img[y:y + down_height + h, x+w:x + w + down_width] = tmp
+                    if x+w+down_width > img.shape[1]:
+                        print("oggetto fuori dall'inquadratura. Riposizionare la webcam")
+                    else:
+                        roi = img[y:y+ down_height, x+w:x + w + down_width]
+                        roi[np.where(mask)] = 0
+                        roi += oggetto_add
+                        tmp = cv2.add(roi, oggetto_add)
+                        img[y:y + down_height + h, x+w:x + w + down_width] = tmp
 
 
 
