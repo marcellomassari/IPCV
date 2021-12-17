@@ -8,7 +8,7 @@ termina = 0
 r = sr.Recognizer()
 mic = sr.Microphone(device_index=0)
 
-print("Benvenuto, sono l'assistente vocale Thea.")
+print("Benvenuto, sono l'assistente vocale Mebel.")
 print("Posso cercare oggetti nella tua stanza o aggiungerne di nuovi!")
 
 while termina == 0:
