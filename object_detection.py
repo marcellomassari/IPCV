@@ -92,5 +92,5 @@ def start_video(video_path, utente_id):
         if key == 27:
             break
     cap.release()
-    print( "Grazie per aver utilizzato la nostra applicazione. Alla prossima!!")
+
 

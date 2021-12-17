@@ -128,5 +128,5 @@ def start_video(video_path, IMG_OBJ, DIR, OBJ_REF_ID):
         if key == 27:
             break
     cap.release()
-    print( "Grazie per aver utilizzato la nostra applicazione. Alla prossima!!")
+
 
