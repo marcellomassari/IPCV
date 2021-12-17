@@ -3,16 +3,18 @@ import object_detection
 import object_insertion_2D
 import cv2
 
-r = sr.Recognizer()
+termina = 0
 
+r = sr.Recognizer()
 mic = sr.Microphone(device_index=0)
 
-termina = 0
+print("Benvenuto, sono l'assistente vocale Thea.")
+print("Posso cercare oggetti nella tua stanza o aggiungerne di nuovi!")
 
 while termina == 0:
 
     with mic as source:
-        print("Aspetta. Sto calibrando il microfono...")
+        print("Aspetta solo un momento. Sto calibrando il microfono...")
         r.adjust_for_ambient_noise(source, duration=2)
         print("Ora parla!!")
         audio = r.listen(source)
@@ -37,15 +39,16 @@ while termina == 0:
             print("Richiesta non valida!")
             OBJ_ID = -1
 
-        print(OBJ_ID)
-
+        print("Per inserire un nuovo comando premere ESC, grazie!")
         object_detection.start_video("videos/video_prova.mp4", OBJ_ID)
 
     elif audio_vettore[0].lower() == "posiziona":
         object_pos = audio_vettore[2]
         object_ref = audio_vettore[len(audio_vettore)-1]
 
-        if len(audio_vettore) == 6:
+        if len(audio_vettore) == 5:
+            direction = audio_vettore[3]
+        elif len(audio_vettore) == 6:
             direction = audio_vettore[3]
         elif len(audio_vettore) == 7:
             direction = audio_vettore[4]
@@ -70,10 +73,12 @@ while termina == 0:
         elif object_pos == "televisore":
             IMG_OBJ = cv2.imread("objects/televisore.png")
 
-        object_insertion_2D.start_video("videos/video_prova.mp4",IMG_OBJ, direction, OBJ_REF_ID)
+        print("Per inserire un nuovo comando premere ESC, grazie!")
+        #object_insertion_2D.start_video("videos/video_prova.mp4", IMG_OBJ, direction, OBJ_REF_ID)
+        object_insertion_2D.start_video(0, IMG_OBJ, direction, OBJ_REF_ID)
 
     elif audio_vettore[0].lower() == "termina":
-        print( "Grazie per aver utilizzato la nostra applicazione. Alla prossima!!")
+        print("Grazie per aver utilizzato la nostra applicazione. Alla prossima!!")
         termina = 1
 
     else:

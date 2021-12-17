@@ -1,7 +1,6 @@
 import cv2
 import numpy as np
 
-
 def load_yolo():
     net = cv2.dnn.readNet("yolov3.weights", "yolov3.cfg")
 
@@ -51,46 +50,38 @@ def draw_labels(boxes, confs, colors, class_ids, classes, img, IMG_OBJ, DIR, OBJ
             if class_ids[i] == OBJ_REF_ID:
                 x, y, w, h = boxes[i]
 
-                label = str(classes[class_ids[i]])
-                color = colors[i]
-                cv2.rectangle(img, (x,y), (x+w, y+h), color, 2)
-                cv2.putText(img, label, (x, y-5), font, 1, color, 1)
-
-
-
-
-
                 down_width = int(w/4)
                 down_height = int(h/2)
                 down_points = (down_width, down_height)
                 oggetto_add = cv2.resize(IMG_OBJ, down_points, interpolation=cv2.INTER_LINEAR)
 
                 recenter = int(w/2) - int(down_width/2)
+                adjust = int(h/15)
 
                 oggetto_add2 = cv2.cvtColor(oggetto_add, cv2.COLOR_BGR2GRAY)
                 ret, mask = cv2.threshold(oggetto_add2, 1, 255, cv2.THRESH_BINARY)
-                if DIR == "sopra":
+                if DIR == "sopra" or DIR == "sul" or DIR == "sull'":
                     h=int(-h/2)
-                    if y+h<0:
-                        print("oggetto momentaneamente fuori dall'inquadratura. Riposizionare la webcam.")
+                    if y+h+adjust<0:
+                        print("Oggetto momentaneamente fuori dall'inquadratura. Riposizionare la webcam.")
                     else:
-                        roi = img[y+h:y+h+down_height, x+recenter:x+recenter+down_width]
+                        roi = img[y + h + adjust:y + h + adjust + down_height, x + recenter:x + recenter + down_width]
                         roi[np.where(mask)] = 0
                         roi += oggetto_add
                         tmp = cv2.add(roi, oggetto_add)
-                        img[y + h :y +down_height + h, x+recenter:x+recenter+down_width]=tmp
+                        img[y + h + adjust :y + h + adjust + down_height, x + recenter:x + recenter + down_width] = tmp
                 elif DIR == "sotto":
                     if OBJ_REF_ID==57 or OBJ_REF_ID==59:
-                        print("impossibile posizionare oggetto")
+                        print("Impossibile posizionare oggetto")
                     else:
-                        roi = img[y + h-down_height:y + h, x+recenter:x+recenter + down_width]
+                        roi = img[y + h - down_height:y + h, x + recenter:x + recenter + down_width]
                         roi[np.where(mask)] = 0
                         roi += oggetto_add
                         tmp = cv2.add(roi, oggetto_add)
-                        img[y + h-down_height:y + h, x+recenter:x+recenter + down_width] = tmp
+                        img[y + h - down_height:y + h, x + recenter:x + recenter + down_width] = tmp
                 elif DIR == "sinistra":
                     if x-down_width<0:
-                        print("oggetto fuori dall'inquadratura. Riposizionare la webcam")
+                        print("Oggetto fuori dall'inquadratura. Riposizionare la webcam")
                     else:
                         roi = img[y:y + down_height, x-down_width :x]
                         roi[np.where(mask)] = 0
@@ -99,7 +90,7 @@ def draw_labels(boxes, confs, colors, class_ids, classes, img, IMG_OBJ, DIR, OBJ
                         img[y:y + down_height, x-down_width:x] = tmp
                 elif DIR == "destra":
                     if x+w+down_width > img.shape[1]:
-                        print("oggetto fuori dall'inquadratura. Riposizionare la webcam")
+                        print("Oggetto fuori dall'inquadratura. Riposizionare la webcam")
                     else:
                         roi = img[y:y+ down_height, x+w:x + w + down_width]
                         roi[np.where(mask)] = 0
@@ -107,17 +98,13 @@ def draw_labels(boxes, confs, colors, class_ids, classes, img, IMG_OBJ, DIR, OBJ
                         tmp = cv2.add(roi, oggetto_add)
                         img[y:y + down_height + h, x+w:x + w + down_width] = tmp
 
-
-
-
         cv2.imshow("Image", img)
 
 
 def start_video(video_path, IMG_OBJ, DIR, OBJ_REF_ID):
     model, classes, colors, output_layers = load_yolo()
     cap = cv2.VideoCapture(video_path)
-    #per webcam
-    #cap = cv2.VideoCapture(0)
+
     while True:
         _, frame = cap.read()
         height, width, channels = frame.shape
