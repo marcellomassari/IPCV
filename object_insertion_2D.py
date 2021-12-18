@@ -83,20 +83,20 @@ def draw_labels(boxes, confs, colors, class_ids, classes, img, IMG_OBJ, DIR, OBJ
                     if x-down_width<0:
                         print("Oggetto fuori dall'inquadratura. Riposizionare la webcam")
                     else:
-                        roi = img[y:y + down_height, x-down_width :x]
+                        roi = img[y + h - down_height:y + h, x-down_width :x]
                         roi[np.where(mask)] = 0
                         roi += oggetto_add
                         tmp = cv2.add(roi, oggetto_add)
-                        img[y:y + down_height, x-down_width:x] = tmp
+                        img[y + h - down_height:y + h, x-down_width:x] = tmp
                 elif DIR == "destra":
                     if x+w+down_width > img.shape[1]:
                         print("Oggetto fuori dall'inquadratura. Riposizionare la webcam")
                     else:
-                        roi = img[y:y+ down_height, x+w:x + w + down_width]
+                        roi = img[y + h - down_height:y + h, x+w:x + w + down_width]
                         roi[np.where(mask)] = 0
                         roi += oggetto_add
                         tmp = cv2.add(roi, oggetto_add)
-                        img[y:y + down_height + h, x+w:x + w + down_width] = tmp
+                        img[y + h - down_height:y + h, x+w:x + w + down_width] = tmp
 
         cv2.imshow("Image", img)
 

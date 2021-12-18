@@ -40,7 +40,8 @@ while termina == 0:
             OBJ_ID = -1
 
         print("Per inserire un nuovo comando premere ESC, grazie!")
-        object_detection.start_video("videos/video_prova.mp4", OBJ_ID)
+        object_detection.start_video(0, OBJ_ID)
+        #object_detection.start_video("videos/video_prova.mp4", OBJ_ID)
 
     elif audio_vettore[0].lower() == "posiziona":
         object_pos = audio_vettore[2]
