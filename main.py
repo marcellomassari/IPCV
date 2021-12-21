@@ -72,10 +72,8 @@ while termina == 0:
             IMG_OBJ = cv2.imread("objects/vaso.png")
         elif object_pos == "lampada":
             IMG_OBJ = cv2.imread("objects/lampada.png")
-        elif object_pos == "piatto":
-            IMG_OBJ = cv2.imread("objects/piatto.png")
-        elif object_pos == "televisore":
-            IMG_OBJ = cv2.imread("objects/televisore.png")
+        elif object_pos == "pianta":
+            IMG_OBJ = cv2.imread("objects/pianta.png")
 
         print("Per inserire un nuovo comando premere ESC, grazie!")
         #object_insertion_2D.start("videos/video_prova.mp4", IMG_OBJ, direction, OBJ_REF_ID)
