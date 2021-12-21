@@ -75,13 +75,12 @@ def draw_labels(boxes, confs, colors, class_ids, classes, img, utente_id):
                 cv2.rectangle(img, (x,y), (x+w, y+h), color, 2)
                 cv2.putText(img, label, (x, y-5), font, 1, color, 1)
 
-
         cv2.imshow("Image", img)
 
-def start_video(video_path, utente_id):
+def start(video_path, utente_id):
     model, classes, colors, output_layers = load_yolo()
     cap = cv2.VideoCapture(video_path)
-    #cap = cv2.VideoCapture(0) per webcam
+
     while True:
         _, frame = cap.read()
         height, width, channels = frame.shape

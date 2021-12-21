@@ -4,14 +4,10 @@ import numpy as np
 def load_yolo():
     net = cv2.dnn.readNet("yolov3.weights", "yolov3.cfg")
 
-    classes = []
-    with open("coco.names", "r") as f:
-        classes = [line.strip() for line in f.readlines()]
-
     layers_names = net.getLayerNames()
     output_layers = [layers_names[i[0]-1] for i in net.getUnconnectedOutLayers()]
-    colors = np.random.uniform(0,255, size=(len(classes), 3))
-    return net, classes, colors, output_layers
+
+    return net, output_layers
 
 def detect_objects(img, net, outputLayers):
     blob = cv2.dnn.blobFromImage(img, scalefactor=(1/255), size=(320,320), mean=(0,0,0), swapRB=True, crop=False)
@@ -41,9 +37,8 @@ def get_box_dimensions(outputs, height, width):
                 class_ids.append(class_id)
     return boxes, confs, class_ids
 
-def draw_labels(boxes, confs, colors, class_ids, classes, img, IMG_OBJ, DIR, OBJ_REF_ID):
+def draw_objects(boxes, confs, class_ids, img, IMG_OBJ, DIR, OBJ_REF_ID):
     indexes = cv2.dnn.NMSBoxes(boxes, confs, 0.5, 0.4)
-    font = cv2.FONT_HERSHEY_PLAIN
     for i in range(len(boxes)):
         if i in indexes:
             # IDENTIFICA SOLO CLASSE PRESCELTA
@@ -69,7 +64,7 @@ def draw_labels(boxes, confs, colors, class_ids, classes, img, IMG_OBJ, DIR, OBJ
                         roi[np.where(mask)] = 0
                         roi += oggetto_add
                         tmp = cv2.add(roi, oggetto_add)
-                        img[y + h + adjust :y + h + adjust + down_height, x + recenter:x + recenter + down_width] = tmp
+                        img[y + h + adjust:y + h + adjust + down_height, x + recenter:x + recenter + down_width] = tmp
                 elif DIR == "sotto":
                     if OBJ_REF_ID==57 or OBJ_REF_ID==59:
                         print("Impossibile posizionare oggetto")
@@ -83,26 +78,26 @@ def draw_labels(boxes, confs, colors, class_ids, classes, img, IMG_OBJ, DIR, OBJ
                     if x-down_width<0:
                         print("Oggetto fuori dall'inquadratura. Riposizionare la webcam")
                     else:
-                        roi = img[y + h - down_height:y + h, x-down_width :x]
+                        roi = img[y + h - down_height:y + h, x - down_width :x]
                         roi[np.where(mask)] = 0
                         roi += oggetto_add
                         tmp = cv2.add(roi, oggetto_add)
-                        img[y + h - down_height:y + h, x-down_width:x] = tmp
+                        img[y + h - down_height:y + h, x - down_width:x] = tmp
                 elif DIR == "destra":
                     if x+w+down_width > img.shape[1]:
                         print("Oggetto fuori dall'inquadratura. Riposizionare la webcam")
                     else:
-                        roi = img[y + h - down_height:y + h, x+w:x + w + down_width]
+                        roi = img[y + h - down_height:y + h, x + w:x + w + down_width]
                         roi[np.where(mask)] = 0
                         roi += oggetto_add
                         tmp = cv2.add(roi, oggetto_add)
-                        img[y + h - down_height:y + h, x+w:x + w + down_width] = tmp
+                        img[y + h - down_height:y + h, x + w:x + w + down_width] = tmp
 
         cv2.imshow("Image", img)
 
 
-def start_video(video_path, IMG_OBJ, DIR, OBJ_REF_ID):
-    model, classes, colors, output_layers = load_yolo()
+def start(video_path, IMG_OBJ, DIR, OBJ_REF_ID):
+    model, output_layers = load_yolo()
     cap = cv2.VideoCapture(video_path)
 
     while True:
@@ -110,7 +105,7 @@ def start_video(video_path, IMG_OBJ, DIR, OBJ_REF_ID):
         height, width, channels = frame.shape
         blob, outputs = detect_objects(frame, model, output_layers)
         boxes, confs, class_ids = get_box_dimensions(outputs, height, width)
-        draw_labels(boxes, confs, colors, class_ids, classes, frame, IMG_OBJ, DIR, OBJ_REF_ID)
+        draw_objects(boxes, confs, class_ids, frame, IMG_OBJ, DIR, OBJ_REF_ID)
         key = cv2.waitKey(1)
         if key == 27:
             break
