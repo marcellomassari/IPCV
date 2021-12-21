@@ -67,13 +67,12 @@ def draw_objects(boxes, confs, class_ids, img, IMG_OBJ, DIR, OBJ_REF_ID):
                         img[y + h + adjust:y + h + adjust + down_height, x + recenter:x + recenter + down_width] = tmp
                 elif DIR == "sotto":
                     if OBJ_REF_ID==57 or OBJ_REF_ID==59:
-                        print("Impossibile posizionare oggetto")
-                    else:
-                        roi = img[y + h - down_height:y + h, x + recenter:x + recenter + down_width]
-                        roi[np.where(mask)] = 0
-                        roi += oggetto_add
-                        tmp = cv2.add(roi, oggetto_add)
-                        img[y + h - down_height:y + h, x + recenter:x + recenter + down_width] = tmp
+                        print("Impossibile posizionare oggetto sotto; verrà posizionato davanti")
+                    roi = img[y + h - down_height:y + h, x + recenter:x + recenter + down_width]
+                    roi[np.where(mask)] = 0
+                    roi += oggetto_add
+                    tmp = cv2.add(roi, oggetto_add)
+                    img[y + h - down_height:y + h, x + recenter:x + recenter + down_width] = tmp
                 elif DIR == "sinistra":
                     if x-down_width<0:
                         print("Oggetto fuori dall'inquadratura. Riposizionare la webcam")
