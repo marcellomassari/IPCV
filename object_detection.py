@@ -14,15 +14,7 @@ def load_yolo():
     # net.getUnconnectedOutLayers() returns the indices of the output layers of the network
     layers_names = net.getLayerNames()
     output_layers = [layers_names[i[0]-1] for i in net.getUnconnectedOutLayers()]
-    colors = np.random.uniform(0,255, size=(len(classes), 3))
-    return net, classes, colors, output_layers
-
-def load_image(img_path):
-    # image loading
-    img = cv2.imread(img_path)
-    img = cv2.resize(img, None, fx=0.4, fy=0.4)
-    height, width, channels = img.shape
-    return img, height, width, channels
+    return net, classes, output_layers
 
 def detect_objects(img, net, outputLayers):
     # blobFromImage preprocesses our image to predict the objects. Performs scaling, mean, subtraction and channel swap
@@ -57,13 +49,14 @@ def get_box_dimensions(outputs, height, width):
                 class_ids.append(class_id)
     return boxes, confs, class_ids
 
-def draw_labels(boxes, confs, colors, class_ids, classes, img, utente_id):
+def draw_labels(boxes, confs, class_ids, classes, img, utente_id):
     # draw the bounding box and add an object label to it
     # NMSBoxes --> Non-Maximum Suppression --> we pass in confidence threshold value and NMS threshold value as parameters to select one bounding box.
     # From the range 0 to 1 we should select an intermediate value like 0.4 or 0.5
     # to make sure that we detect thew overlapping objects but do not end up getting multiple bounding boxes for the same object.
     indexes = cv2.dnn.NMSBoxes(boxes, confs, 0.5, 0.4)
     font = cv2.FONT_HERSHEY_PLAIN
+    nero = (0,0,0)
     for i in range(len(boxes)):
         if i in indexes:
             # IDENTIFICA SOLO CLASSE PRESCELTA
@@ -71,14 +64,13 @@ def draw_labels(boxes, confs, colors, class_ids, classes, img, utente_id):
                 x, y, w, h = boxes[i]
 
                 label = str(classes[class_ids[i]])
-                color = colors[i]
-                cv2.rectangle(img, (x,y), (x+w, y+h), color, 2)
-                cv2.putText(img, label, (x, y-5), font, 1, color, 1)
+                cv2.rectangle(img, (x,y), (x+w, y+h), nero, 2)
+                cv2.putText(img, label, (x, y-5), font, 1, nero, 1)
 
         cv2.imshow("Image", img)
 
 def start(video_path, utente_id):
-    model, classes, colors, output_layers = load_yolo()
+    model, classes, output_layers = load_yolo()
     cap = cv2.VideoCapture(video_path)
 
     while True:
@@ -86,7 +78,7 @@ def start(video_path, utente_id):
         height, width, channels = frame.shape
         blob, outputs = detect_objects(frame, model, output_layers)
         boxes, confs, class_ids = get_box_dimensions(outputs, height, width)
-        draw_labels(boxes, confs, colors, class_ids, classes, frame, utente_id)
+        draw_labels(boxes, confs, class_ids, classes, frame, utente_id)
         key = cv2.waitKey(1)
         if key == 27:
             break
