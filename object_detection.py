@@ -33,7 +33,6 @@ def get_box_dimensions(outputs, height, width):
     for output in outputs:
         for detect in output:
             scores = detect[5:]
-            #print(scores)
             class_id = np.argmax(scores)
             conf = scores[class_id]
             # select bounding box with confidence > 30%
@@ -69,9 +68,9 @@ def draw_labels(boxes, confs, class_ids, classes, img, utente_id):
 
         cv2.imshow("Image", img)
 
-def start(video_path, utente_id):
+def start(utente_id):
     model, classes, output_layers = load_yolo()
-    cap = cv2.VideoCapture(video_path)
+    cap = cv2.VideoCapture(0)
 
     while True:
         _, frame = cap.read()

@@ -45,8 +45,7 @@ while termina == 0:
             OBJ_ID = -1
 
         print("Per inserire un nuovo comando premere ESC, grazie!")
-        object_detection.start(0, OBJ_ID)
-        #object_detection.start("videos/video_prova.mp4", OBJ_ID)
+        object_detection.start(OBJ_ID)
 
     elif audio_vettore[0].lower() == "posiziona":
         object_pos = audio_vettore[2]
@@ -76,8 +75,7 @@ while termina == 0:
             IMG_OBJ = cv2.imread("objects/pianta.png")
 
         print("Per inserire un nuovo comando premere ESC, grazie!")
-        #object_insertion_2D.start("videos/video_prova.mp4", IMG_OBJ, direction, OBJ_REF_ID)
-        object_insertion_2D.start(0, IMG_OBJ, direction, OBJ_REF_ID)
+        object_insertion_2D.start(IMG_OBJ, direction, OBJ_REF_ID)
 
     elif audio_vettore[0].lower() == "termina":
         print("Grazie per aver utilizzato la nostra applicazione. Alla prossima!!")

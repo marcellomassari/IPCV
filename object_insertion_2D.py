@@ -96,9 +96,9 @@ def draw_objects(boxes, confs, class_ids, img, IMG_OBJ, DIR, OBJ_REF_ID):
         cv2.imshow("Image", img)
 
 
-def start(video_path, IMG_OBJ, DIR, OBJ_REF_ID):
+def start(IMG_OBJ, DIR, OBJ_REF_ID):
     model, output_layers = load_yolo()
-    cap = cv2.VideoCapture(video_path)
+    cap = cv2.VideoCapture(0)
 
     while True:
         _, frame = cap.read()
