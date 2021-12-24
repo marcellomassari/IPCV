@@ -84,7 +84,7 @@ while termina == 0:
                 print("Richiesta non valida!")
                 riprova = 1
 
-            if riprova == 1:
+            if riprova == 0:
                 print("Per inserire un nuovo comando premere ESC, grazie!")
                 object_insertion_2D.start(IMG_OBJ, direction, OBJ_REF_ID)
 
