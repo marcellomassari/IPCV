@@ -13,6 +13,8 @@ print("Posso cercare oggetti nella tua stanza o aggiungerne di nuovi!")
 
 while termina == 0:
 
+    riprova = 0
+
     with mic as source:
         print("Aspetta solo un momento. Sto calibrando il microfono...")
         r.adjust_for_ambient_noise(source, duration=2)
@@ -22,7 +24,6 @@ while termina == 0:
         audio_stringa = r.recognize_google(audio, language="it-IT")
         audio_vettore = audio_stringa.split()
         print(audio_vettore)
-
 
         if audio_vettore[0].lower() == "cerca":
             object = audio_vettore[len(audio_vettore)-1]
@@ -43,10 +44,11 @@ while termina == 0:
                 OBJ_ID = 73
             else:
                 print("Richiesta non valida!")
-                OBJ_ID = -1
+                riprova = 1
 
-            print("Per inserire un nuovo comando premere ESC, grazie!")
-            object_detection.start(OBJ_ID)
+            if riprova == 0:
+                print("Per inserire un nuovo comando premere ESC, grazie!")
+                object_detection.start(OBJ_ID)
 
         elif audio_vettore[0].lower() == "posiziona":
             object_pos = audio_vettore[2]
@@ -58,6 +60,9 @@ while termina == 0:
                 direction = audio_vettore[3]
             elif len(audio_vettore) == 7:
                 direction = audio_vettore[4]
+            else:
+                print("Richiesta non valida!")
+                riprova = 1
 
             if object_ref == "divano":
                 OBJ_REF_ID = 57
@@ -67,6 +72,7 @@ while termina == 0:
                 OBJ_REF_ID = 60
             else:
                 print("Richiesta non valida!")
+                riprova = 1
 
             if object_pos == "vaso":
                 IMG_OBJ = cv2.imread("objects/vaso.png")
@@ -74,9 +80,13 @@ while termina == 0:
                 IMG_OBJ = cv2.imread("objects/lampada.png")
             elif object_pos == "pianta":
                 IMG_OBJ = cv2.imread("objects/pianta.png")
+            else:
+                print("Richiesta non valida!")
+                riprova = 1
 
-            print("Per inserire un nuovo comando premere ESC, grazie!")
-            object_insertion_2D.start(IMG_OBJ, direction, OBJ_REF_ID)
+            if riprova == 1:
+                print("Per inserire un nuovo comando premere ESC, grazie!")
+                object_insertion_2D.start(IMG_OBJ, direction, OBJ_REF_ID)
 
         elif audio_vettore[0].lower() == "termina":
             print("Grazie per aver utilizzato la nostra applicazione. Alla prossima!!")
