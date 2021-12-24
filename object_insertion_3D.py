@@ -59,5 +59,3 @@ def draw_box(box, x, y):
     visualization.draw(box)
 
 pyglet.app.run()
-
-# comment
